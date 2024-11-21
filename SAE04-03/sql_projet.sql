@@ -6,7 +6,9 @@ DROP TABLE IF EXISTS usine;
 DROP TABLE IF EXISTS vehicule;
 DROP TABLE IF EXISTS centre;
 
-CREATE TABLE centre(
+CREATE SCHEMA `db_usine` ;
+
+CREATE TABLE db_usine.centre(
    num_centre INT AUTO_INCREMENT,
    nom_centre VARCHAR(50),
    adresse_centre VARCHAR(50),
