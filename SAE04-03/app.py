@@ -1,4 +1,6 @@
-from flask import Flask, render_template, redirect, g
+from datetime import datetime
+
+from flask import Flask, render_template, redirect, g, request
 import pymysql.cursors
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -86,9 +88,37 @@ def show_decharge():
     liste_decharge = mycursor.fetchall()
     return render_template('decharge/decharge_show.html', decharges=liste_decharge)
 
-@app.route('/decharge/add')
+@app.route('/decharge/add', methods=['GET'])
 def add_decharge():
-    return render_template('decharge/decharge_add.html')
+    form_data = getFormDechargeList(None, None)
+    return render_template('decharge/decharge_add.html', form_init=form_data)
+
+@app.route('/decharge/add', methods=['POST'])
+def save_decharge():
+    form_data = {
+        "num_usine": request.form['num_usine'],
+        "num_produit": request.form['num_produit'],
+        "num_vehicule": request.form['num_vehicule'],
+        "quantite": request.form['quantite'],
+    }
+    error_list = checkFormDecharge(form_data)
+    if error_list:
+        formInfos = getFormDechargeList(form_data, error_list)
+        return render_template('decharge/decharge_add.html', form_init=formInfos)
+    mycursor = get_db().cursor()
+    sql = '''  INSERT INTO decharge(num_produit, num_usine, num_vehicule, quantite, JMA)
+            VALUES (%s,%s,%s,%s,%s)
+                 '''
+    turple_insert = (
+        form_data['num_produit'],
+        form_data['num_usine'],
+        form_data['num_vehicule'],
+        form_data['quantite'],
+        datetime.today(),
+    )
+    mycursor.execute(sql, turple_insert)
+    get_db().commit()
+    return redirect('/decharge/show')
 
 @app.route('/decharge/edit')
 def edit_decharge():
@@ -125,6 +155,70 @@ def etat_vehicule():
     return render_template('vehicule/vehicule_etat.html')
 
 # ---------------------------------------------------------------------#
+
+def checkFormDecharge(formData):
+    erroList = []
+    # check produit
+    mycursor = get_db().cursor()
+    sql = '''   SELECT num_produit
+            FROM produit
+            WHERE num_produit=%s;
+                 '''
+    mycursor.execute(sql, (formData['num_produit']))
+    if mycursor.rowcount == 0 :
+        erroList.append("Erreur:  Produit invalide !")
+
+    #check usine
+    mycursor = get_db().cursor()
+    sql = '''   SELECT num_usine
+               FROM usine
+               WHERE num_usine=%s;
+                    '''
+    mycursor.execute(sql, (formData['num_usine']))
+    if mycursor.rowcount == 0:
+        erroList.append("Erreur:  Usine inexistante !")
+
+    #check vehicule
+    mycursor = get_db().cursor()
+    sql = '''   SELECT num_vehicule
+               FROM vehicule
+               WHERE num_vehicule=%s;
+                    '''
+    mycursor.execute(sql, (formData['num_vehicule']))
+    if mycursor.rowcount == 0:
+        erroList.append("Erreur:  Vehicule introuvable !")
+
+    return erroList
+
+def getFormDechargeList(previousData, errorList):
+    mycursor = get_db().cursor()
+    sql = '''   SELECT *
+                FROM usine
+                ORDER BY nom_usine;
+                     '''
+    mycursor.execute(sql)
+    usines = mycursor.fetchall()
+
+    sql = '''   SELECT *
+                    FROM produit
+                    ORDER BY libelle_produit;
+                         '''
+    mycursor.execute(sql)
+    produits = mycursor.fetchall()
+    sql = '''   SELECT *
+                        FROM vehicule
+                        ORDER BY poid_max;
+                             '''
+    mycursor.execute(sql)
+    vehicules = mycursor.fetchall()
+    return {
+        "usines": usines,
+        "produits": produits,
+        "vehicules": vehicules,
+        "errorList": errorList,
+        "previousData": previousData
+    }
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
