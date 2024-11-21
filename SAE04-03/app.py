@@ -1,19 +1,16 @@
 from flask import Flask, render_template, redirect, g
 import pymysql.cursors
 app = Flask(__name__)
-
-host = ""
-user = ""
-password = ""
-database = ""
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.secret_key = 'une cle(token) : grain de sel(any random string)'
 
 def get_db():
     if 'db' not in g:
         g.db =  pymysql.connect(
-            host=host,                 # à modifier
-            user=user,                     # à modifier
-            password=password,                # à modifier
-            database=database,        # à modifier
+            host="localhost", # à modifier
+            user="root", # à modifier
+            password="root", # à modifier
+            database="db_usine", # à modifier
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -77,7 +74,17 @@ def etat_passage():
 
 @app.route('/decharge/show')
 def show_decharge():
-    return render_template('decharge/decharge_show.html')
+    mycursor = get_db().cursor()
+    sql = '''   SELECT *
+        FROM decharge
+        INNER JOIN usine ON decharge.num_usine = usine.num_usine
+        INNER JOIN vehicule ON decharge.num_vehicule = vehicule.num_vehicule
+        INNER JOIN  produit ON decharge.num_produit = produit.num_produit
+        ORDER BY JMA DESC;
+             '''
+    mycursor.execute(sql)
+    liste_decharge = mycursor.fetchall()
+    return render_template('decharge/decharge_show.html', decharges=liste_decharge)
 
 @app.route('/decharge/add')
 def add_decharge():
@@ -120,4 +127,4 @@ def etat_vehicule():
 # ---------------------------------------------------------------------#
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=5000)
