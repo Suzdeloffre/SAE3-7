@@ -1,9 +1,29 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    <title>Decharge</title>
+    <title>Ajout d'une décharge</title>
 {% endblock %}
 
 {% block body %}
-Decharge add
+    {% for usine in form_init.usines %}
+        <p>{{ usine.nom_usine }}|{{ usine.adresse_usine }}</p>
+    {% endfor %}
+
+    {% for vehicule in form_init.vehicules %}
+        <p>{{ vehicule.poid_max }}|{{ vehicule.date_achat }}</p>
+    {% endfor %}
+
+    {% for produit in form_init.produits %}
+        <p>{{ produit.libelle_produit }}</p>
+    {% endfor %}
+
+    {% for error in form_init.errorList %}
+        <p>{{ error}}</p>
+    {% endfor %}
 {% endblock %}
+
+<body>
+    <div class="container mt-4">
+
+    </div>
+</body>

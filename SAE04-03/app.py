@@ -26,7 +26,7 @@ def teardown_db(exception):
 
 @app.route('/')
 def show_layout():
-    return render_template('layout.html')
+    return render_template('index.html')
 
 # ---------------------------------------------------------------------#
 
@@ -126,6 +126,14 @@ def edit_decharge():
 
 @app.route('/decharge/delete')
 def delete_decharge():
+    mycursor = get_db().cursor()
+    sql = '''   DELETE FROM décharge
+     WHERE num=%s;
+             '''
+    turple_insert = (id)
+    mycursor.execute(sql, turple_insert)
+
+    get_db().commit()
     return redirect('decharge/show')
 
 @app.route('/decharge/etat')

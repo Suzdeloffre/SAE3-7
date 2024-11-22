@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {% block title %}
+        <title>Accueil</title>
+    {% endblock %}
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/kaiadmin/favicon.ico') }}"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{{ url_for('static', filename='css/fonts.min.css') }}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kaiadmin.min.css') }}" />
+  </head>
+  <body>
+    <div class="wrapper">
+      {% include('template-sections/side_bar.html') %}
+
+      <div class="main-panel">
+        {% include('template-sections/main_header.html') %}
+        {% block body %}
+        <div class="container">
+          <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+            >
+              <div>
+                <h3 class="fw-bold mb-3">Tableau de bord</h3>
+                <h6 class="op-7 mb-2">Accueil</h6>
+              </div>
+              <div class="ms-md-auto py-2 py-md-0">
+                <a href="#" class="btn btn-primary btn-round">Add Customer</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
+        {% include('template-sections/main_footer.html') %}
+      </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="{{ url_for('static', filename='js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/bootstrap.min.js') }}"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="{{ url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+
+    <!-- jQuery Sparkline -->
+    <script src="{{ url_for('static', filename='js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
+
+    <!-- Datatables -->
+    <script src="{{ url_for('static', filename='js/plugin/datatables/datatables.min.js') }}"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="{{ url_for('static', filename='js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+
+    <!-- Sweet Alert -->
+    <script src="{{ url_for('static', filename='js/plugin/sweetalert/sweetalert.min.js') }}"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
+    <script>
+      $(document).ready(function () {
+          $("#basic-datatables").DataTable({});
+      })
+    </script>
+  </body>
+</html>
