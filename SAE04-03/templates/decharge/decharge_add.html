@@ -1,29 +1,24 @@
-{% extends 'layout.html' %}
+{% extends 'index.html' %}
 
 {% block title %}
     <title>Ajout d'une décharge</title>
 {% endblock %}
 
 {% block body %}
-    {% for usine in form_init.usines %}
-        <p>{{ usine.nom_usine }}|{{ usine.adresse_usine }}</p>
-    {% endfor %}
-
-    {% for vehicule in form_init.vehicules %}
-        <p>{{ vehicule.poid_max }}|{{ vehicule.date_achat }}</p>
-    {% endfor %}
-
-    {% for produit in form_init.produits %}
-        <p>{{ produit.libelle_produit }}</p>
-    {% endfor %}
-
-    {% for error in form_init.errorList %}
-        <p>{{ error}}</p>
-    {% endfor %}
-{% endblock %}
-
-<body>
-    <div class="container mt-4">
-
+    <div class="container">
+        <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+            >
+                <div>
+                    <h3 class="fw-bold mb-3">Ajout d'une décharge</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- TODO : A modifier -->
+                </div>
+            </div>
+        </div>
     </div>
-</body>
+{% endblock %}

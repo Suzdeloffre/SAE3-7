@@ -1,9 +1,27 @@
-{% extends 'layout.html' %}
+{% extends 'index.html' %}
 
 {% block title %}
-    <title>Passage</title>
+    <title>Liste des passages</title>
 {% endblock %}
 
 {% block body %}
-Passage show
+    <div class="container">
+        <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+            >
+                <div>
+                    <h3 class="fw-bold mb-3">Liste des passages</h3>
+                </div>
+                <div class="ms-md-auto py-2 py-md-0">
+                    <a href="/passage/add" class="btn btn-primary btn-round">Ajouter un Passage</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- TODO : A modifier -->
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
