@@ -56,9 +56,6 @@
                 <h3 class="fw-bold mb-3">Tableau de bord</h3>
                 <h6 class="op-7 mb-2">Accueil</h6>
               </div>
-              <div class="ms-md-auto py-2 py-md-0">
-                <a href="#" class="btn btn-primary btn-round">Add Customer</a>
-              </div>
             </div>
           </div>
         </div>
@@ -90,8 +87,20 @@
     <script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
     <script>
       $(document).ready(function () {
-          $("#basic-datatables").DataTable({});
+          $("#basic-datatables").DataTable({
+              order: [[0, 'desc'], [1, 'asc']]
+          });
       })
+      {% if decharges and decharges.form_value == '1' %}
+        swal("Confirmation", "Enregistrement effectué avec succès !", {
+          icon: "success",
+          buttons: {
+            confirm: {
+              className: "btn btn-success",
+            },
+          },
+        });
+      {% endif %}
     </script>
   </body>
 </html>

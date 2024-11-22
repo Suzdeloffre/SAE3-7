@@ -10,13 +10,152 @@
             <div
               class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
             >
-                <div>
+                <div class="page-header">
                     <h3 class="fw-bold mb-3">Modification d'une décharge</h3>
+                    <ul class="breadcrumbs mb-3">
+                        <li class="nav-home">
+                            <a href="/">
+                                <i class="icon-home"></i>
+                            </a>
+                        </li>
+                        <li class="separator">
+                            <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item">
+                          <a href="/decharge/show">Liste des décharges</a>
+                        </li>
+                        <li class="separator">
+                          <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item">
+                            Formulaire
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <!-- TODO : A modifier -->
+                    <form method="post" action="/decharge/edit">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Formulaire d'une décharge</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_vehicule">Véhicule (Numéro / Poids max / Date d'achat)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_vehicule"
+                                                name="num_vehicule"
+                                                required
+                                            >
+                                                {% if form_init and form_init.vehicules %}
+                                                    {% for vehicule in form_init.vehicules %}
+                                                        <option
+                                                                 {% if form_init
+                                                                     and form_init.previous_data
+                                                                     and form_init.previous_data.num_vehicule == vehicule.num_vehicule %}
+                                                                     selected="selected"
+                                                                {% endif %}
+                                                                value="{{vehicule.num_vehicule}}">
+                                                            {{ vehicule.num_vehicule }} / {{ vehicule.poid_max }} / {{ vehicule.date_achat }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_usine">Usine (Nom / adresse)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_usine"
+                                                name="num_usine"
+                                                required
+                                            >
+                                                {% if form_init and form_init.usines %}
+                                                    {% for usine in form_init.usines %}
+                                                        <option
+                                                                {% if form_init
+                                                                     and form_init.previous_data
+                                                                     and form_init.previous_data.num_usine == usine.num_usine %}
+                                                                     selected="selected"
+                                                                {% endif %}
+                                                                value="{{usine.num_usine}}">
+                                                            {{ usine.nom_usine }} / {{ usine.adresse_usine }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_produit">Libelle produit</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_produit"
+                                                name="num_produit"
+                                                required
+                                            >
+                                                {% if form_init and form_init.produits %}
+                                                    {% for produit in form_init.produits %}
+                                                        <option
+                                                            {% if form_init
+                                                                and form_init.previous_data
+                                                                and form_init.previous_data.num_produit == produit.num_produit %}
+                                                              selected="selected"
+                                                            {% endif %}
+                                                            value="{{produit.num_produit}}">
+                                                            {{ produit.libelle_produit }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="quantite">Quantité</label>
+                                            <div class="input-group mb-3">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control"
+                                                    id="quantite"
+                                                    name="quantite"
+                                                    required
+                                                    {% if form_init and form_init.previous_data %}
+                                                      value="{{ form_init.previous_data.quantite }}"
+                                                    {% else %}
+                                                      value="023"
+                                                    {% endif %}
+                                                />
+                                                <span class="input-group-text">Kg</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control"
+                                        hidden=""
+                                        name="id"
+                                        {% if form_init and form_init.previous_data %}
+                                          value="{{ form_init.previous_data.num_vehicule}}*{{ form_init.previous_data.num_usine}}*{{ form_init.previous_data.num_produit}}*{{ form_init.previous_data.JMA}}"
+                                        {% endif %}
+                                    />
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <button class="btn btn-success" type="submit">Sauvegarder</button>
+                                <a class="btn btn-danger" href="/decharge/show">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

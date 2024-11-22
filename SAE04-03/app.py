@@ -76,6 +76,7 @@ def etat_passage():
 
 @app.route('/decharge/show')
 def show_decharge():
+    form_value = request.args.get('form_value', '0')
     mycursor = get_db().cursor()
     sql = '''   SELECT *
         FROM decharge
@@ -86,11 +87,17 @@ def show_decharge():
              '''
     mycursor.execute(sql)
     liste_decharge = mycursor.fetchall()
-    return render_template('decharge/decharge_show.html', decharges=liste_decharge)
+    return render_template(
+        'decharge/decharge_show.html',
+        decharges={
+            'liste_decharge': liste_decharge,
+            'form_value': form_value
+        }
+    )
 
 @app.route('/decharge/add', methods=['GET'])
 def add_decharge():
-    form_data = getFormDechargeList(None, None)
+    form_data = getFormDechargeList(None)
     return render_template('decharge/decharge_add.html', form_init=form_data)
 
 @app.route('/decharge/add', methods=['POST'])
@@ -103,8 +110,8 @@ def save_decharge():
     }
     error_list = checkFormDecharge(form_data)
     if error_list:
-        formInfos = getFormDechargeList(form_data, error_list)
-        return render_template('decharge/decharge_add.html', form_init=formInfos)
+        form_infos = getFormDechargeList(form_data)
+        return render_template('decharge/decharge_add.html', form_init=form_infos)
     mycursor = get_db().cursor()
     sql = '''  INSERT INTO decharge(num_produit, num_usine, num_vehicule, quantite, JMA)
             VALUES (%s,%s,%s,%s,%s)
@@ -113,28 +120,100 @@ def save_decharge():
         form_data['num_produit'],
         form_data['num_usine'],
         form_data['num_vehicule'],
-        form_data['quantite'],
+        form_data['quantite'] + 'kg',
         datetime.today(),
     )
     mycursor.execute(sql, turple_insert)
     get_db().commit()
-    return redirect('/decharge/show')
+    return redirect('/decharge/show?form_value=1')
 
-@app.route('/decharge/edit')
+@app.route('/decharge/edit', methods=['GET'])
 def edit_decharge():
-    return render_template('decharge/decharge_edit.html')
+    id = request.args.get('id')
+    idSplited = id.split("*")
+    form_data = {
+        "num_usine": idSplited[1],
+        "num_produit": idSplited[2],
+        "num_vehicule": idSplited[0],
+        "JMA": idSplited[3],
+    }
+    if id != None :
+        mycursor = get_db().cursor()
+        sql = '''   SELECT *
+            FROM decharge
+            WHERE num_vehicule = %s AND num_usine = %s AND num_produit = %s AND JMA = %s;
+                 '''
+        turple_edit = (
+            form_data['num_vehicule'],
+            form_data['num_usine'],
+            form_data['num_produit'],
+            form_data['JMA'],
+        )
+        mycursor.execute(sql, turple_edit)
+        decharge = mycursor.fetchone()
+    else:
+        decharge = None
+    form_data = getFormDechargeList(decharge)
+    print(form_data)
+    return render_template('decharge/decharge_edit.html', form_init=form_data)
+
+@app.route('/decharge/edit', methods=['POST'])
+def update_decharge():
+    form_data = {
+        "num_usine": request.form['num_usine'],
+        "num_produit": request.form['num_produit'],
+        "num_vehicule": request.form['num_vehicule'],
+        "quantite": request.form['quantite'],
+        "id": request.form['id'],
+    }
+    idSplited = form_data['id'].split("*")
+    error_list = checkFormDecharge(form_data)
+    if error_list:
+        form_infos = getFormDechargeList(form_data)
+        return render_template('decharge/decharge_add.html', form_init=form_infos)
+    mycursor = get_db().cursor()
+    sql = '''  UPDATE decharge
+                SET num_produit=%s, num_usine=%s, num_vehicule=%s, quantite=%s, JMA=%s
+                WHERE num_vehicule = %s AND num_usine = %s AND num_produit = %s AND JMA = %s
+                 '''
+    turple_update = (
+        form_data['num_produit'],
+        form_data['num_usine'],
+        form_data['num_vehicule'],
+        form_data['quantite'] + 'kg',
+        datetime.today(),
+        idSplited[0],
+        idSplited[1],
+        idSplited[2],
+        idSplited[3]
+    )
+    mycursor.execute(sql, turple_update)
+    get_db().commit()
+    return redirect('/decharge/show?form_value=1')
 
 @app.route('/decharge/delete')
 def delete_decharge():
+    id = request.args.get('id', '')
+    idSplited = id.split("*")
+    form_data = {
+        "num_usine": idSplited[1],
+        "num_produit": idSplited[2],
+        "num_vehicule": idSplited[0],
+        "JMA": idSplited[3],
+    }
     mycursor = get_db().cursor()
-    sql = '''   DELETE FROM décharge
-     WHERE num=%s;
-             '''
-    turple_insert = (id)
-    mycursor.execute(sql, turple_insert)
-
+    sql = '''   DELETE FROM decharge
+            WHERE num_vehicule = %s AND num_usine = %s AND num_produit = %s AND JMA = %s
+        '''
+    turple_delete = (
+        form_data['num_vehicule'],
+        form_data['num_usine'],
+        form_data['num_produit'],
+        form_data['JMA'],
+    )
+    mycursor.execute(sql, turple_delete)
     get_db().commit()
-    return redirect('decharge/show')
+    return redirect('/decharge/show?form_value=1')
 
 @app.route('/decharge/etat')
 def etat_decharge():
@@ -198,7 +277,7 @@ def checkFormDecharge(formData):
 
     return erroList
 
-def getFormDechargeList(previousData, errorList):
+def getFormDechargeList(previousData):
     mycursor = get_db().cursor()
     sql = '''   SELECT *
                 FROM usine
@@ -219,12 +298,14 @@ def getFormDechargeList(previousData, errorList):
                              '''
     mycursor.execute(sql)
     vehicules = mycursor.fetchall()
+    if previousData:
+        print(previousData)
+        previousData['quantite'] = int(previousData['quantite'].replace("kg", "").strip())
     return {
         "usines": usines,
         "produits": produits,
         "vehicules": vehicules,
-        "errorList": errorList,
-        "previousData": previousData
+        "previous_data": previousData
     }
 
 

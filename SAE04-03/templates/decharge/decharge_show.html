@@ -49,7 +49,7 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        {% for decharge in decharges %}
+                                        {% for decharge in decharges.liste_decharge %}
                                             <tr>
                                                 <td>{{ decharge.JMA }}</td>
                                                 <td>{{ decharge.nom_usine }}</td>
@@ -60,13 +60,13 @@
                                                     <a
                                                         type="button"
                                                         class="btn btn-icon btn-round btn-primary"
-                                                        href="{{ '/decharge/edit/'}}{{ decharge.num_vehicule}}*{{ decharge.num_usine}}*{{ decharge.num_produit}}*{{ decharge.JMA}}">
+                                                        href="{{ '/decharge/edit?id='}}{{ decharge.num_vehicule}}*{{ decharge.num_usine}}*{{ decharge.num_produit}}*{{ decharge.JMA}}">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
                                                     <a
                                                         type="button"
                                                         class="btn btn-icon btn-round btn-danger"
-                                                        href="{{ '/decharge/delete/'}}{{ decharge.num_vehicule}}*{{ decharge.num_usine}}*{{ decharge.num_produit}}*{{ decharge.JMA}}">
+                                                        href="{{ '/decharge/delete?id='}}{{ decharge.num_vehicule}}*{{ decharge.num_usine}}*{{ decharge.num_produit}}*{{ decharge.JMA}}">
                                                         <i class="fa fa-trash"></i>
                                                     </a>
                                                 </td>
