@@ -1,14 +1,12 @@
 DROP TABLE IF EXISTS passe;
 DROP TABLE IF EXISTS decharge;
-DROP TABLE IF EXISTS contient;
+DROP TABLE IF EXISTS benne;
 DROP TABLE IF EXISTS produit;
 DROP TABLE IF EXISTS usine;
 DROP TABLE IF EXISTS vehicule;
 DROP TABLE IF EXISTS centre;
 
-CREATE SCHEMA `db_usine` ;
-
-CREATE TABLE db_usine.centre(
+CREATE TABLE centre(
    num_centre INT AUTO_INCREMENT,
    nom_centre VARCHAR(50),
    adresse_centre VARCHAR(50),
@@ -35,11 +33,14 @@ CREATE TABLE produit(
    PRIMARY KEY(num_produit)
 );
 
-CREATE TABLE contient(
+CREATE TABLE benne
+(
+   id_benne INT AUTO_INCREMENT,
+   nb_benne INT,
+   volume INT,
    num_centre INT,
    num_produit INT,
-   nb_benne INT,
-   PRIMARY KEY(num_centre, num_produit),
+   PRIMARY KEY(id_benne),
    FOREIGN KEY(num_centre) REFERENCES centre(num_centre),
    FOREIGN KEY(num_produit) REFERENCES produit(num_produit)
 );
@@ -90,13 +91,13 @@ INSERT INTO produit (num_produit, libelle_produit) VALUES
 
 /*INSERT des associations*/
 
-INSERT INTO contient (num_centre, num_produit, nb_benne) VALUES
-(1, 1, 6),
-(1, 3, 2),
-(2, 2, 4),
-(2, 3, 3),
-(3, 1, 2),
-(3, 2, 1);
+INSERT INTO benne (id_benne, nb_benne, volume, num_centre, num_produit) VALUES
+(null, 6, 60, 1, 1),
+(null, 2, 20, 1, 3),
+(null, 4, 40, 2, 2),
+(null, 3, 30, 2, 3),
+(null, 2, 120, 3, 1),
+(null, 1, 100, 3, 2);
 
 INSERT INTO passe (num_centre, num_vehicule, JMA, ordre) VALUES
 (1, 1, '2022-10-23', 1),
@@ -114,9 +115,9 @@ INSERT INTO decharge (num_vehicule, num_usine, num_produit, JMA, quantite) VALUE
 (1, 3, 1, '2022-10-23', '59kg');
 
 /* Affiche tous les centres qui on comme produit le 'Plastique' */
-SELECT centre.num_centre, centre.nom_centre, contient.nb_benne, produit.libelle_produit FROM centre
-JOIN contient ON centre.num_centre = contient.num_centre
-JOIN produit ON produit.num_produit = contient.num_produit
+SELECT centre.num_centre, centre.nom_centre, benne.nb_benne, produit.libelle_produit FROM centre
+JOIN benne ON centre.num_centre = benne.num_centre
+JOIN produit ON produit.num_produit = benne.num_produit
 WHERE libelle_produit='Plastique';
 
 /* Affiche la date ou chaque véhicule a fait une tounée */
