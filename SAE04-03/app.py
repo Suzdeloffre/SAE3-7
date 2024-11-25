@@ -32,7 +32,22 @@ def show_layout():
 
 @app.route('/benne/show')
 def show_benne():
-    return render_template('benne/benne_show.html')
+    form_value = request.args.get('form_value', '0')
+    mycursor = get_db().cursor()
+    sql = '''   SELECT *
+            FROM benne
+            INNER JOIN centre ON benne.num_centre = centre.num_centre
+            INNER JOIN produit ON benne.num_produit = produit.num_produit;
+                 '''
+    mycursor.execute(sql)
+    liste_benne = mycursor.fetchall()
+    return render_template(
+        'benne/benne_show.html',
+        bennes={
+            'liste_benne': liste_benne,
+            'form_value': form_value
+        }
+    )
 
 @app.route('/benne/add')
 def add_benne():
