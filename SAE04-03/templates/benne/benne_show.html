@@ -19,7 +19,61 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <!-- TODO : A modifier -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Bennes sauvegardées</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table
+                                    id="basic-datatables"
+                                    class="display table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Centre</th>
+                                            <th>Volume</th>
+                                            <th>Nombre</th>
+                                            <th>Produit</th>
+                                            <th>Opérations</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Centre</th>
+                                            <th>Volume</th>
+                                            <th>Nombre</th>
+                                            <th>Produit</th>
+                                            <th>Opérations</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for benne in bennes.liste_benne %}
+                                            <tr>
+                                                <td>{{ benne.nom_centre }}</td>
+                                                <td>{{ benne.volume }}</td>
+                                                <td>{{ benne.nb_benne }}</td>
+                                                <td>{{ benne.libelle_produit }}</td>
+                                                <td>
+                                                    <a
+                                                        type="button"
+                                                        class="btn btn-icon btn-round btn-primary"
+                                                        href="{{ '/benne/edit?id='}}{{ benne.num_benne}}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a
+                                                        type="button"
+                                                        class="btn btn-icon btn-round btn-danger"
+                                                        href="{{ '/benne/delete?id='}}{{ benne.num_benne}}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
