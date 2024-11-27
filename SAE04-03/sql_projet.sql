@@ -83,6 +83,17 @@ CREATE TABLE passe(
 
 /*INSERT des entités*/
 
+INSERT INTO type_vehicule(num_type, libelle_type) VALUES
+(NULL, 'camion'),
+(NULL, 'fourgon moyen'),
+(NULL, 'poids lourd');
+
+INSERT INTO marque(num_marque, libelle_marque) VALUES
+(NULL,'Renault'),
+(NULL, 'Volkswagen'),
+(NULL, 'Ford');
+
+
 INSERT INTO centre (num_centre, nom_centre, adresse_centre) VALUES
 (NULL, '3Dechets','10 rue des poubelles'),
 (NULL, 'Dechet2000','25 Avenue des chateaux'),
