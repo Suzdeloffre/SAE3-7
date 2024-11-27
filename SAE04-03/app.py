@@ -322,18 +322,18 @@ def edit_vehicule():
 @app.route('/vehicule/edit', methods=['POST'])
 def valid_edit_vehicule():
     id = request.form.get('id')
-    nbBenne = request.form.get('nbBenne')
-    volume = request.form.get('volume')
-    centre = request.form.get('centre')
-    produit = request.form.get('produit')
+    num_type = request.form.get('type_vehicule')
+    num_marque = request.form.get('marque')
+    poid_max = request.form.get('poid_max')
+    date_achat = request.form.get('date_achat')
 
     mycursor = get_db().cursor()
     sql = '''
-        UPDATE benne 
-        SET nb_benne = %s, volume = %s, num_centre = %s, num_produit = %s
-        WHERE id_benne = %s;
+        UPDATE vehicule
+        SET num_type = %s, num_marque = %s, poid_max = %s, date_achat = %s
+        WHERE num_vehicule = %s;
     '''
-    tuple_insert=(nbBenne, volume, centre, produit, id)
+    tuple_insert=(num_type, num_marque, poid_max, date_achat, id)
     mycursor.execute(sql, tuple_insert)
     get_db().commit()
 
