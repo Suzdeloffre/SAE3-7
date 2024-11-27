@@ -286,41 +286,41 @@ def valid_add_vehicule():
     get_db().commit()
     return redirect('/vehicule/show')
 
-@app.route('/benne/edit', methods=['GET'])
-def edit_benne():
+@app.route('/vehicule/edit', methods=['GET'])
+def edit_vehicule():
     id=request.args.get('id')
     if id != None and id.isnumeric():
         indice = int(id)
         mycursor = get_db().cursor()
         sql = '''
-                SELECT id_benne, nb_benne, volume, num_centre, num_produit 
-                FROM benne
-                WHERE id_benne=%s;
+                SELECT num_vehicule, num_type, num_marque, poid_max, date_achat 
+                FROM vehicule
+                WHERE num_vehicule=%s;
                 '''
         mycursor.execute(sql, indice)
-        benne = mycursor.fetchone()
+        vehicule = mycursor.fetchone()
 
         sql = '''
-                SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
-                FROM centre;
+                SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle,
+                FROM type_vehicule;
                 '''
         mycursor.execute(sql)
-        centres = mycursor.fetchall()
+        type_vehicule = mycursor.fetchall()
 
         sql = '''
-                SELECT produit.num_produit AS id, produit.libelle_produit AS nom
-                FROM produit;
+                SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
+                FROM marque;
                 '''
         mycursor.execute(sql)
-        produits = mycursor.fetchall()
+        marque = mycursor.fetchall()
 
         get_db().commit()
     else:
-        benne=[]
-    return render_template('benne/benne_edit.html', benne=benne, centres=centres, produits=produits)
+        vehicule=[]
+    return render_template('vehicule/vehicule_edit.html', vehicule=vehicule, type_vehicule=type_vehicule, marque=marque)
 
-@app.route('/benne/edit', methods=['POST'])
-def valid_edit_benne():
+@app.route('/vehicule/edit', methods=['POST'])
+def valid_edit_vehicule():
     id = request.form.get('id')
     nbBenne = request.form.get('nbBenne')
     volume = request.form.get('volume')
@@ -337,17 +337,17 @@ def valid_edit_benne():
     mycursor.execute(sql, tuple_insert)
     get_db().commit()
 
-    return redirect('/benne/show')
+    return redirect('/vehicule/show')
 
-@app.route('/benne/delete')
-def delete_benne():
+@app.route('/vehicule/delete')
+def delete_vehicule():
     id = request.args.get('id', '')
     mycursor = get_db().cursor()
     sql = '''   DELETE FROM benne WHERE id_benne=%s;    '''
     turple_insert = (id)
     mycursor.execute(sql, turple_insert)
     get_db().commit()
-    return redirect('/benne/show')
+    return redirect('/vehicule/show')
 
 # ---------------------------------------------------------------------#
 
