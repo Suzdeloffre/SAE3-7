@@ -31,7 +31,11 @@ CREATE TABLE vehicule(
    num_vehicule INT AUTO_INCREMENT,
    poid_max DECIMAL(15,2),
    date_achat DATE,
-   PRIMARY KEY(num_vehicule)
+   num_type INT,
+   num_marque INT,
+   PRIMARY KEY(num_vehicule, num_marque, num_type),
+   FOREIGN KEY(num_type) REFERENCES type_vehicule(num_type),
+   FOREIGN KEY(num_marque) REFERENCES marque(num_marque)
 );
 
 CREATE TABLE usine(
@@ -84,8 +88,8 @@ CREATE TABLE passe(
 /*INSERT des entités*/
 
 INSERT INTO type_vehicule(num_type, libelle_type) VALUES
-(NULL, 'camion'),
 (NULL, 'fourgon moyen'),
+(NULL, 'camion'),
 (NULL, 'poids lourd');
 
 INSERT INTO marque(num_marque, libelle_marque) VALUES
