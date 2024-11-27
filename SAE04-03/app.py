@@ -343,7 +343,7 @@ def valid_edit_vehicule():
 def delete_vehicule():
     id = request.args.get('id', '')
     mycursor = get_db().cursor()
-    sql = '''   DELETE FROM benne WHERE id_benne=%s;    '''
+    sql = '''   DELETE FROM vehicule WHERE num_vehicule=%s;    '''
     turple_insert = (id)
     mycursor.execute(sql, turple_insert)
     get_db().commit()
