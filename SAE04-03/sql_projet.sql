@@ -5,6 +5,20 @@ DROP TABLE IF EXISTS produit;
 DROP TABLE IF EXISTS usine;
 DROP TABLE IF EXISTS vehicule;
 DROP TABLE IF EXISTS centre;
+DROP TABLE IF EXISTS marque;
+DROP TABLE IF EXISTS type_vehicule;
+
+CREATE TABLE type_vehicule(
+    num_type INT AUTO_INCREMENT,
+    libelle_type VARCHAR(25),
+    PRIMARY KEY (num_type)
+);
+
+CREATE TABLE marque(
+    num_marque INT AUTO_INCREMENT,
+    libelle_marque VARCHAR(25),
+    PRIMARY KEY (num_marque)
+);
 
 CREATE TABLE centre(
    num_centre INT AUTO_INCREMENT,
