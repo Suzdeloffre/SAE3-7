@@ -254,22 +254,22 @@ def show_vehicule():
 def add_vehicule():
     mycursor = get_db().cursor()
     sql = '''
-        SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
-        FROM centre;
+        SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle,
+        FROM type_vehicule;
         '''
     mycursor.execute(sql)
-    centres = mycursor.fetchall()
+    type_vehicule = mycursor.fetchall()
 
     sql = '''
-        SELECT produit.num_produit AS id, produit.libelle_produit AS nom
-        FROM produit;
+        SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
+        FROM marque;
         '''
     mycursor.execute(sql)
-    produits = mycursor.fetchall()
-    return render_template('benne/benne_add.html', centres=centres, produits=produits)
+    marque = mycursor.fetchall()
+    return render_template('vehicule/vehicule_add.html', type_vehicule=type_vehicule, marque=marque)
 
-@app.route('/benne/add', methods=['POST'])
-def valid_add_benne():
+@app.route('/vehicule/add', methods=['POST'])
+def valid_add_vehicule():
     nbBenne = request.form.get('nbBenne')
     volume = request.form.get('volume')
     centre = request.form.get('centre')
