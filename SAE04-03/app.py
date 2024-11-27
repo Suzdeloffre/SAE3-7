@@ -270,20 +270,21 @@ def add_vehicule():
 
 @app.route('/vehicule/add', methods=['POST'])
 def valid_add_vehicule():
-    nbBenne = request.form.get('nbBenne')
-    volume = request.form.get('volume')
-    centre = request.form.get('centre')
-    produit = request.form.get('produit')
-    print(nbBenne, volume, centre, produit)
+    num_type = request.form.get('type_vehicule')
+    num_marque = request.form.get('marque')
+    poid_max = request.form.get('poid_max')
+    date_achat = request.form.get('date_achat')
+    print(num_type, num_marque, poid_max, date_achat)
     mycursor = get_db().cursor()
     sql='''
-    INSERT INTO benne(id_benne, nb_benne, volume, num_centre, num_produit) VALUES (NULL, %s, %s, %s, %s);
+    INSERT INTO vehicule(num_vehicule, num_type, num_marque, poid_max, date_achat)
+     VALUES (NULL, %s, %s, %s, %s);
     '''
-    tuple_insert=(nbBenne, volume, centre, produit)
+    tuple_insert=(num_type, num_marque, poid_max, date_achat)
     mycursor.execute(sql, tuple_insert)
 
     get_db().commit()
-    return redirect('/benne/show')
+    return redirect('/vehicule/show')
 
 @app.route('/benne/edit', methods=['GET'])
 def edit_benne():
