@@ -19,7 +19,63 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <!-- TODO : A modifier -->
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Véhicules disponibles</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table
+                                    id="basic-datatables"
+                                    class="display table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Véhicule</th>
+                                            <th>Type</th>
+                                            <th>Marque</th>
+                                            <th>Poids maximal</th>
+                                            <th>Date d'achat</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Véhicule</th>
+                                            <th>Type</th>
+                                            <th>Marque</th>
+                                            <th>Poids maximal</th>
+                                            <th>Date d'achat</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for vehicule in vehicule.liste_vehicule %}
+                                            <tr>
+                                                <td>{{ vehicule.num_vehicule }}</td>
+                                                <td>{{ vehicule.num_type }}</td>
+                                                <td>{{ vehicule.num_marque }}</td>
+                                                <td>{{ vehicule.poid_max }}</td>
+                                                <td>{{ vehicule.date_achat }}</td>
+                                                <td>
+                                                    <a
+                                                        type="button"
+                                                        class="btn btn-icon btn-round btn-primary"
+                                                        href="{{ '/vehicule/edit?id='}}{{ vehicule.num_vehicule}}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a
+                                                        type="button"
+                                                        class="btn btn-icon btn-round btn-danger"
+                                                        href="{{ '/vehicule/delete?id='}}{{ vehicule.num_vehicule}}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

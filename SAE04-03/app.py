@@ -238,7 +238,22 @@ def etat_decharge():
 
 @app.route('/vehicule/show')
 def show_vehicule():
-    return render_template('vehicule/vehicule_show.html')
+    form_value = request.args.get('form_value', '0')
+    mycursor = get_db().cursor()
+    sql = '''   SELECT *
+                FROM vehicule
+                INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type;
+                     '''
+    mycursor.execute(sql)
+    liste_vehicule = mycursor.fetchall()
+    return render_template(
+        'vehicule/vehicule_show.html',
+        vehicule={
+            'liste_vehicule': liste_vehicule,
+            'form_value': form_value
+        }
+    )
 
 @app.route('/vehicule/add')
 def add_vehicule():
