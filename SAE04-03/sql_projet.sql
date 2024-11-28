@@ -33,7 +33,7 @@ CREATE TABLE vehicule(
    date_achat DATE,
    num_type INT,
    num_marque INT,
-   PRIMARY KEY(num_vehicule, num_marque, num_type),
+   PRIMARY KEY(num_vehicule),
    FOREIGN KEY(num_type) REFERENCES type_vehicule(num_type),
    FOREIGN KEY(num_marque) REFERENCES marque(num_marque)
 );
