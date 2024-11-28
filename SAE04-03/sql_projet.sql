@@ -103,10 +103,10 @@ INSERT INTO centre (num_centre, nom_centre, adresse_centre) VALUES
 (NULL, 'Dechet2000','25 Avenue des chateaux'),
 (NULL, 'FourTout','2 rue sous le pont');
 
-INSERT INTO vehicule (num_vehicule, poid_max, date_achat) VALUES
-(NULL, 100, '2022-10-10'),
-(NULL, 150, '2023-08-1'),
-(NULL, 75, '2024-1-20');
+INSERT INTO vehicule (num_vehicule, poid_max, date_achat, num_type,num_marque) VALUES
+(NULL, 100, '2022-10-10',2 ,3),
+(NULL, 150, '2023-08-1', 3, 1),
+(NULL, 75, '2024-1-20',1, 2);
 
 INSERT INTO usine (num_usine, nom_usine, adresse_usine) VALUES
 (NULL, 'TriTout', '26 rue des champs'),

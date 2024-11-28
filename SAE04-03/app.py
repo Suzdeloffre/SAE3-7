@@ -26,7 +26,7 @@ def teardown_db(exception):
 
 @app.route('/')
 def show_layout():
-    return render_template('index.html')
+    return render_template('layout.html')
 
 # ---------------------------------------------------------------------#
 
@@ -254,7 +254,7 @@ def show_vehicule():
 def add_vehicule():
     mycursor = get_db().cursor()
     sql = '''
-        SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle,
+        SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle
         FROM type_vehicule;
         '''
     mycursor.execute(sql)
