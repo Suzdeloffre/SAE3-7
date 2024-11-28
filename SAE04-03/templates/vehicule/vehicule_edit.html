@@ -1,24 +1,47 @@
-{% extends 'index.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}
-    <title>Modification d'un véhicule</title>
+    <title>Véhicule</title>
 {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="page-inner">
-            <div
-              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
-            >
-                <div>
-                    <h3 class="fw-bold mb-3">Modification d'un véhicule</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <!-- TODO : A modifier -->
-                </div>
-            </div>
-        </div>
-    </div>
+    <h3>Editer un véhicule</h3>
+    <form method="post" action="/benne/edit">
+        <fieldset>
+            <legend> Modifier un véhicule</legend>
+
+            <input type="hidden" name="id" value="{{ vehicule.num_vehicule }}" >
+
+            <label for="type_vehicule">Le type de véhicule</label><br>
+            <select name="type_vehicule" required>
+                <option value="{{ vehicule.num_type }}">Sélectionner un type</option>
+                {% for type_vehicule in type_vehicule %}
+                    <option value="{{ type_vehicule.num_type }}"
+                            {% if type_vehicule.num_type is defined and vehicule.num_type == type_vehicule.num_type %}selected{% endif %}>
+                        {{ type_vehicule.libelle_type }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="marque">La marque</label><br>
+            <select name="marque" required>
+                {% for marque in marque %}
+                    <option value="{{ marque.num_marque}}"
+                            {% if marque.num_marque is defined and vehicule.num_marque == marque.num_marque %}selected{% endif %}>
+                        {{ marque.libelle_marque }}</option>
+                {% endfor %}
+            </select><br>
+
+
+            <label for="poid_max">Le poids maximal</label><br>
+            <input id="poid_max" type="number" name="poid_max" value="{{ vehicule.num_vehicule }}" required><br>
+
+
+            <label for="date_achat">La date d'achat</label><br>
+            <input id="date_achat" type="date" name="date_achat" value="{{ vehicule.date_achat }}" required><br>
+
+
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
 {% endblock %}
