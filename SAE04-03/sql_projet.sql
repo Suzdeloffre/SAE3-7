@@ -91,7 +91,6 @@ INSERT INTO type_vehicule(num_type, libelle_type) VALUES
 (NULL, 'fourgon moyen'),
 (NULL, 'camion'),
 (NULL, 'poids lourd');
-
 INSERT INTO marque(num_marque, libelle_marque) VALUES
 (NULL,'Renault'),
 (NULL, 'Volkswagen'),
