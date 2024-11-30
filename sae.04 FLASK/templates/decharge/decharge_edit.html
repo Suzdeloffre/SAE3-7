@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Decharge</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Editer une decharge</h3>
+    <form method="post" action="/decharge/edit">
+        <fieldset>
+            <legend> Modifier une decharge</legend>
+            <input type="hidden" name="id" value="{{ decharge.id_decharge }}" >
+
+            <label for="vehicule">Vehicule</label><br>
+            <select name="vehicule" required>
+                {% for vehicule in vehicules %}
+                    <option value="{{ vehicule.id }}"
+                            {% if vehicule.id is defined and decharge.num_vehicule == vehicule.id %}selected{% endif %}>
+                        {{ vehicule.id }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="produit">Produit</label><br>
+            <select name="produit" required>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}"
+                            {% if produit.id is defined and decharge.num_produit == produit.id %}selected{% endif %}>
+                        {{ produit.nom }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="usine">Usine</label><br>
+            <select name="usine" required>
+                {% for usine in usines %}
+                    <option value="{{ usine.id }}"
+                            {% if usine.id is defined and decharge.num_usine == usine.id %}selected{% endif %}>
+                        {{ usine.nom }} / {{ usine.adresse }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="date_decharge">Date de decharge</label><br>
+            <input id="date_decharge" type="date" name="date_decharge" value="{{ decharge.JMA }}" required><br>
+            <label for="quantite">Quantité déchargée</label><br>
+            <input id="quantite" type="number" name="quantite" value="{{ decharge.quantite }}" required><br>
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
+{% endblock %}

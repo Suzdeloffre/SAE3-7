@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Decharge</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Ajouter une decharge</h3>
+    <form method="post" action="/decharge/add">
+        <fieldset>
+            <legend> Créer une decharge</legend>
+
+            <label for="vehicule">Vehicule</label><br>
+            <select name="vehicule" required>
+                <option value="">Sélectionner un vehicule</option>
+                {% for vehicule in vehicules %}
+                    <option value="{{ vehicule.id }}"> {{ vehicule.id }}</option>
+                {% endfor %}
+            </select><br>
+            <label for="produit">Produit</label><br>
+            <select name="produit" required>
+                <option value="">Sélectionner un type de produit</option>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}"> {{ produit.nom }}</option>
+                {% endfor %}
+            </select><br>
+            <label for="usine">Usine</label><br>
+            <select name="usine" required>
+                <option value="">Sélectionner une usine</option>
+                {% for usine in usines %}
+                    <option value="{{ usine.id }}"> {{ usine.nom }} / {{ usine.adresse }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="date_decharge">Date de decharge</label><br>
+            <input id="date_decharge" type="date" name="date_decharge" value="" required><br>
+            <label for="quantite">Quantité déchargée</label><br>
+            <input id="quantite" type="number" name="quantite" value="" required><br>
+
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
+{% endblock %}

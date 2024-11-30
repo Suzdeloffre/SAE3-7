@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Benne</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Editer une benne</h3>
+    <form method="post" action="/benne/edit">
+        <fieldset>
+            <legend> Modifier une benne</legend>
+            <input type="hidden" name="id" value="{{ benne.id_benne }}" >
+            <label for="nbBenne">Nombre de benne</label><br>
+            <input id="nbBenne" type="number" name="nbBenne" value="{{ benne.nb_benne }}" required><br>
+            <label for="volume">Volume par benne</label><br>
+            <input id="volume" type="number" name="volume" value="{{ benne.volume }}" required><br>
+
+            <label for="centre">Centre</label><br>
+            <select name="centre" required>
+                {% for centre in centres %}
+                    <option value="{{ centre.id }}"
+                            {% if centre.id is defined and benne.num_centre == centre.id %}selected{% endif %}>
+                        {{ centre.nom }} / {{ centre.adresse }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="produit">Produit</label><br>
+            <select name="produit" required>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}"
+                            {% if produit.id is defined and benne.num_produit == produit.id %}selected{% endif %}>
+                        {{ produit.nom }}</option>
+                {% endfor %}
+            </select><br>
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
+{% endblock %}
