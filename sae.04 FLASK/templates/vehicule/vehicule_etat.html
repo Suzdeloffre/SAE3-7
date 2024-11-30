@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Etat des véhicules</title>
+{% endblock %}
+
+{% block body %}
+    <h3>L'Etat</h3>
+    <br><br>
+
+    <h1>L'Etat</h1>
+    <form method="get" action="/valid_etat_vehicule" >
+
+        <h1>Par véhicule</h1>
+        {% for vehicule in vehicules %}
+            <label for="vehicule{{ vehicule.num_vehicule }}">{{ vehicule.num_vehicule}}</label>
+            <input id="vehicule{{ vehicule.num_vehicule }}" type="checkbox" name="vehicule{{ vehicule_num_vehicule }}"><br>
+        {% endfor %}
+        <input type="submit" value="Valider" name="Valider" >
+    </form>
+
+     <form method="get" action="/valid_etat_vehicule" >
+
+        <h1>Par type de véhicule</h1>
+        {% for type_vehicule in type_vehicules %}
+            <label for="type_vehicule{{ type_vehicule.num_type }}">{{ type_vehicule.libelle_type}}</label>
+            <input id="type_vehicule{{ type_vehicule.num_type }}" type="checkbox" name="type_vehicule{{ type_vehicule.libelle_type }}"><br>
+        {% endfor %}
+        <input type="submit" value="Valider" name="Valider" >
+    </form>
+     <form method="get" action="/valid_etat_vehicule" >
+
+        <h1>Par marque</h1>
+        {% for marque in marques %}
+            <label for="marque{{ marque.num_marque }}">{{ marque.libelle_marque}}</label>
+            <input id="marque{{ marque.num_marque }}" type="checkbox" name="marque{{ marque.libelle_marque }}"><br>
+        {% endfor %}
+        <input type="submit" value="Valider" name="Valider" >
+    </form>
+
+    <tbody>
+        {% if vehicule | length >= 1 %}
+
+        <h3>Information</h3>
+            <div>
+                <div class="info_box">
+                       <p>Numéro du véhicule: {{ vehicule.num_vehicule }}</p>
+                       <p>Date de naissance: {{ ligne.dateNaissance }}</p>
+                </div>
+                <div class="info_box">
+                     <p>Couleur: {{ ligne.couleur }}</p>
+                     <p>Poids: {{ ligne.poids }}</p>
+                     <p>Taille: {{ ligne.taille }}</p>
+                </div>
+                <hr>
+                    <div class="achat">
+                        <p>Prix d'achat: {{ ligne.prixAchat }}</p>
+                        <a href="#">Ajouter</a>
+                    </div>
+
+            </div>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>
+                    pas de type d'animaux
+                </td>
+            </tr>
+        {% endif %}
+        </tbody>
+
+{% endblock %}

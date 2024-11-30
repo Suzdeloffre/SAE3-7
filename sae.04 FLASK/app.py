@@ -296,6 +296,59 @@ def valid_delete_decharge():
     get_db().commit()
     return redirect('/vehicule/delete?id='+idV)
 
+@app.route('/vehicule/etat', methods=['GET'])
+def etat_vehicule():
+    id=request.args.get('id')
+    if id != None and id.isnumeric():
+        indice = int(id)
+        mycursor = get_db().cursor()
+        sql = '''
+                SELECT num_vehicule, num_type, num_marque, poid_max, date_achat 
+                FROM vehicule
+                WHERE num_vehicule=%s;
+                '''
+        mycursor.execute(sql, indice)
+        vehicule = mycursor.fetchone()
+
+        sql = '''
+                SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle,
+                FROM type_vehicule;
+                '''
+        mycursor.execute(sql)
+        type_vehicule = mycursor.fetchall()
+
+        sql = '''
+                SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
+                FROM marque;
+                '''
+        mycursor.execute(sql)
+        marque = mycursor.fetchall()
+
+        get_db().commit()
+    else:
+        vehicule=[]
+    return render_template('vehicule/vehicule_etat.html', vehicule=vehicule, type_vehicule=type_vehicule, marque=marque)
+
+@app.route('/vehicule/edit', methods=['POST'])
+def valid_etat_vehicule():
+    id = request.form.get('id')
+    num_type = request.form.get('type_vehicule')
+    num_marque = request.form.get('marque')
+    poid_max = request.form.get('poid_max')
+    date_achat = request.form.get('date_achat')
+
+    mycursor = get_db().cursor()
+    sql = '''
+        UPDATE vehicule
+        SET num_type = %s, num_marque = %s, poid_max = %s, date_achat = %s
+        WHERE num_vehicule = %s;
+    '''
+    tuple_insert=(num_type, num_marque, poid_max, date_achat, id)
+    mycursor.execute(sql, tuple_insert)
+    get_db().commit()
+
+    return redirect('/vehicule/etat')
+
 
 # ---------------------------------------------------------------------#
 
