@@ -1,49 +1,134 @@
-{% extends 'layout.html' %}
+{% extends 'index.html' %}
 
 {% block title %}
-    <title>Decharge</title>
+    <title>Modification d'une décharge</title>
 {% endblock %}
 
 {% block body %}
-    <h3>Editer une decharge</h3>
-    <form method="post" action="/decharge/edit">
-        <fieldset>
-            <legend> Modifier une decharge</legend>
-            <input type="hidden" name="id" value="{{ decharge.id_decharge }}" >
-
-            <label for="vehicule">Vehicule</label><br>
-            <select name="vehicule" required>
-                {% for vehicule in vehicules %}
-                    <option value="{{ vehicule.id }}"
-                            {% if vehicule.id is defined and decharge.num_vehicule == vehicule.id %}selected{% endif %}>
-                        {{ vehicule.id }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="produit">Produit</label><br>
-            <select name="produit" required>
-                {% for produit in produits %}
-                    <option value="{{ produit.id }}"
-                            {% if produit.id is defined and decharge.num_produit == produit.id %}selected{% endif %}>
-                        {{ produit.nom }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="usine">Usine</label><br>
-            <select name="usine" required>
-                {% for usine in usines %}
-                    <option value="{{ usine.id }}"
-                            {% if usine.id is defined and decharge.num_usine == usine.id %}selected{% endif %}>
-                        {{ usine.nom }} / {{ usine.adresse }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="date_decharge">Date de decharge</label><br>
-            <input id="date_decharge" type="date" name="date_decharge" value="{{ decharge.JMA }}" required><br>
-            <label for="quantite">Quantité déchargée</label><br>
-            <input id="quantite" type="number" name="quantite" value="{{ decharge.quantite }}" required><br>
-
-            <input type="submit" value="Valider" name="Valider">
-        </fieldset>
-    </form>
+    <div class="container">
+        <div class="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="post" action="/decharge/edit">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Modification d'une décharge</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_vehicule">Véhicule (Numéro / Poids max / Date d'achat)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_vehicule"
+                                                name="num_vehicule"
+                                                required
+                                            >
+                                                {% if vehicules %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for vehicule in vehicules %}
+                                                        <option
+                                                                 {% if previous_data and previous_data.vehicule == vehicule.id %}
+                                                                     selected="selected"
+                                                                {% endif %}
+                                                                value="{{vehicule.id}}">
+                                                            {{ vehicule.id }} / {{ vehicule.poids }} / {{ vehicule.date_achat }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_usine">Usine (Nom / adresse)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_usine"
+                                                name="num_usine"
+                                                required
+                                            >
+                                                {% if usines %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for usine in usines %}
+                                                        <option
+                                                                {% if previous_data
+                                                                     and previous_data.usine == usine.id %}
+                                                                     selected="selected"
+                                                                {% endif %}
+                                                                value="{{usine.id}}">
+                                                            {{ usine.nom }} / {{ usine.adresse }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_produit">Libelle produit</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_produit"
+                                                name="num_produit"
+                                                required
+                                            >
+                                                {% if produits %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for produit in produits %}
+                                                        <option
+                                                            {% if previous_data
+                                                                and previous_data.produit == produit.id %}
+                                                              selected="selected"
+                                                            {% endif %}
+                                                            value="{{produit.id}}">
+                                                            {{ produit.libelle }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="quantite">Quantité</label>
+                                            <div class="input-group mb-3">
+                                                <input
+                                                    type="number"
+                                                    class="form-control form-control"
+                                                    id="quantite"
+                                                    name="quantite"
+                                                    min="0"
+                                                    required
+                                                    {% if previous_data %}
+                                                      value="{{ previous_data.quantite }}"
+                                                    {% endif %}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        class="form-control form-control"
+                                        hidden=""
+                                        name="id"
+                                        {% if previous_data %}
+                                          value="{{ previous_data.id}}"
+                                        {% endif %}
+                                    />
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <button class="btn btn-success" type="submit">Sauvegarder</button>
+                                <a class="btn btn-danger" href="/decharge/show">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

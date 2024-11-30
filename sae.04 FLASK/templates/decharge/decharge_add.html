@@ -1,44 +1,108 @@
-{% extends 'layout.html' %}
+{% extends 'index.html' %}
 
 {% block title %}
-    <title>Decharge</title>
+    <title>Ajout d'une décharge</title>
 {% endblock %}
 
 {% block body %}
-    <h3>Ajouter une decharge</h3>
-    <form method="post" action="/decharge/add">
-        <fieldset>
-            <legend> Créer une decharge</legend>
-
-            <label for="vehicule">Vehicule</label><br>
-            <select name="vehicule" required>
-                <option value="">Sélectionner un vehicule</option>
-                {% for vehicule in vehicules %}
-                    <option value="{{ vehicule.id }}"> {{ vehicule.id }}</option>
-                {% endfor %}
-            </select><br>
-            <label for="produit">Produit</label><br>
-            <select name="produit" required>
-                <option value="">Sélectionner un type de produit</option>
-                {% for produit in produits %}
-                    <option value="{{ produit.id }}"> {{ produit.nom }}</option>
-                {% endfor %}
-            </select><br>
-            <label for="usine">Usine</label><br>
-            <select name="usine" required>
-                <option value="">Sélectionner une usine</option>
-                {% for usine in usines %}
-                    <option value="{{ usine.id }}"> {{ usine.nom }} / {{ usine.adresse }}</option>
-                {% endfor %}
-            </select><br>
-
-            <label for="date_decharge">Date de decharge</label><br>
-            <input id="date_decharge" type="date" name="date_decharge" value="" required><br>
-            <label for="quantite">Quantité déchargée</label><br>
-            <input id="quantite" type="number" name="quantite" value="" required><br>
-
-
-            <input type="submit" value="Valider" name="Valider">
-        </fieldset>
-    </form>
+    <div class="container">
+        <div class="page-inner">
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="post" action="/decharge/add">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-title">Ajout d'une décharge</div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_vehicule">Véhicule (Numéro / Poids max / Date d'achat)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_vehicule"
+                                                name="num_vehicule"
+                                                required
+                                            >
+                                                {% if vehicules %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for vehicule in vehicules %}
+                                                        <option value="{{vehicule.id}}">
+                                                            {{ vehicule.id }} / {{ vehicule.poids }} / {{ vehicule.date_achat }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_usine">Usine (Nom / adresse)</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_usine"
+                                                name="num_usine"
+                                                required
+                                            >
+                                                {% if usines %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for usine in usines %}
+                                                        <option value="{{usine.id}}">
+                                                            {{ usine.nom }} / {{ usine.adresse }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="num_produit">Libelle produit</label>
+                                            <select
+                                                class="form-select"
+                                                id="num_produit"
+                                                name="num_produit"
+                                                required
+                                            >
+                                                {% if produits %}
+                                                    <option value="">Sélectionner une valeur</option>
+                                                    {% for produit in produits %}
+                                                        <option value="{{produit.id}}">
+                                                            {{ produit.libelle }}
+                                                        </option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="quantite">Quantité</label>
+                                            <div class="input-group">
+                                                <input
+                                                    type="number"
+                                                    class="form-control"
+                                                    min="0"
+                                                    id="quantite"
+                                                    name="quantite"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <button class="btn btn-success" type="submit">Sauvegarder</button>
+                                <a class="btn btn-danger" href="/decharge/show">Annuler</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
