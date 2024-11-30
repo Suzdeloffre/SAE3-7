@@ -337,15 +337,15 @@ def valid_etat_vehicule():
     poid_max = request.form.get('poid_max')
     date_achat = request.form.get('date_achat')
 
-    mycursor = get_db().cursor()
-    sql = '''
-        UPDATE vehicule
-        SET num_type = %s, num_marque = %s, poid_max = %s, date_achat = %s
-        WHERE num_vehicule = %s;
-    '''
-    tuple_insert=(num_type, num_marque, poid_max, date_achat, id)
-    mycursor.execute(sql, tuple_insert)
-    get_db().commit()
+   # mycursor = get_db().cursor()
+    #sql = '''
+        #UPDATE vehicule
+       # SET num_type = %s, num_marque = %s, poid_max = %s, date_achat = %s
+       # WHERE num_vehicule = %s;
+   # '''
+    #tuple_insert=(num_type, num_marque, poid_max, date_achat, id)
+   # mycursor.execute(sql, tuple_insert)
+    #get_db().commit()
 
     return redirect('/vehicule/etat')
 

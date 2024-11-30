@@ -43,27 +43,26 @@
 
         <h3>Information</h3>
             <div>
+
                 <div class="info_box">
                        <p>Numéro du véhicule: {{ vehicule.num_vehicule }}</p>
-                       <p>Date de naissance: {{ ligne.dateNaissance }}</p>
+
                 </div>
                 <div class="info_box">
-                     <p>Couleur: {{ ligne.couleur }}</p>
-                     <p>Poids: {{ ligne.poids }}</p>
-                     <p>Taille: {{ ligne.taille }}</p>
+                     <p>Type: {{ vehicule.libelle_type }}</p>
+                     <p>Marque: {{ vehicule.libelle_marque }}</p>
+                     <p>Poids maximal: {{ vehicule.poid_max }}</p>
+                    <p>Date d'achat: {{  vehicule.date_achat }}</p>
                 </div>
                 <hr>
-                    <div class="achat">
-                        <p>Prix d'achat: {{ ligne.prixAchat }}</p>
-                        <a href="#">Ajouter</a>
-                    </div>
+
 
             </div>
             {% endfor %}
         {% else %}
             <tr>
                 <td>
-                    pas de type d'animaux
+                    pas de type de vehicule
                 </td>
             </tr>
         {% endif %}
