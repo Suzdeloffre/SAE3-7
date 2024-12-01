@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Passage</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Etat des passages</h3>
+    <form method="post" action="/passage/etat">
+        <fieldset>
+            <legend> Filtre de l'etat</legend>
+
+            <label for="centre">Centre :</label>
+        <select name="centre">
+            <option value="">Tous</option>
+            {% for centre in centres %}
+            <option value="{{ centre.id }}">{{ centre.nom }} / {{ centre.num }} </option>
+            {% endfor %}
+        </select>
+
+        <label for="vehicule">Véhicule :</label>
+        <select name="vehicule">
+            <option value="">Tous</option>
+            {% for vehicule in vehicules %}
+            <option value="{{ vehicule.id }}">{{ vehicule.nom }} / {{ vehicule.num }}</option>
+            {% endfor %}
+        </select>
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
+
+    <br>
+    Total des centres visités : {{ total_centres.total_centres }}
+    <table class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th>Centre</th>
+            <th>Vehicule</th>
+            <th>Nombre passage</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for passage in passages %}
+            <tr>
+                <td>{{ passage.id_passage }}</td>
+                <td>{{ passage.num_centre }}</td>
+                <td>{{ passage.num_vehicule }}</td>
+                <td>{{ passage.JMA }}</td>
+                <td>{{ passage.ordre }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
