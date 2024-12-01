@@ -591,6 +591,146 @@ def delete_passage():
     get_db().commit()
     return redirect('/passage/show')
 
+@app.route('/passage/etat')
+def etat_passage():
+    mycursor = get_db().cursor(dictionary=True)
+
+    sql = '''
+        SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
+        FROM centre;
+    '''
+    mycursor.execute(sql)
+    centres = mycursor.fetchall()
+
+    sql = '''
+        SELECT vehicule.num_vehicule AS id
+        FROM vehicule;
+    '''
+    mycursor.execute(sql)
+    vehicules = mycursor.fetchall()
+
+
+    sql = '''
+        SELECT passage.id_passage, centre.nom_centre, vehicule.num_vehicule, passage.date_passage
+        FROM passage
+        INNER JOIN centre ON passage.num_centre = centre.num_centre
+        INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
+        ORDER BY passage.date_passage ASC;
+    '''
+    mycursor.execute(sql)
+    passages = mycursor.fetchall()
+
+
+    sql = '''
+        SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+        FROM passage;
+    '''
+    mycursor.execute(sql)
+    total_centres = mycursor.fetchone()
+
+    return render_template('passage/passage_etat.html', centres=centres, vehicules=vehicules, passages=passages, total_centres=total_centres)
+
+@app.route('/passage/etat', methods=['POST'])
+def valid_etat_passage():
+    mycursor = get_db().cursor(dictionary=True)
+
+
+    centre = request.form.get('centre')
+    vehicule = request.form.get('vehicule')
+
+    sql = '''
+        SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
+        FROM centre;
+    '''
+    mycursor.execute(sql)
+    centres = mycursor.fetchall()
+
+    sql = '''
+        SELECT vehicule.num_vehicule AS id, vehicule.nom_vehicule AS nom
+        FROM vehicule;
+    '''
+    mycursor.execute(sql)
+    vehicules = mycursor.fetchall()
+
+    if centre == "" and vehicule == "":
+        # Pas de filtre
+        sql = '''
+            SELECT passage.id_passage, centre.nom_centre, vehicule.nom_vehicule, passage.date_passage
+            FROM passage
+            INNER JOIN centre ON passage.num_centre = centre.num_centre
+            INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
+            ORDER BY passage.date_passage ASC;
+        '''
+        mycursor.execute(sql)
+        passages = mycursor.fetchall()
+
+        sql = '''
+            SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+            FROM passage;
+        '''
+        mycursor.execute(sql)
+    elif centre != "" and vehicule == "":
+
+        sql = '''
+            SELECT passage.id_passage, centre.nom_centre, vehicule.nom_vehicule, passage.date_passage
+            FROM passage
+            INNER JOIN centre ON passage.num_centre = centre.num_centre
+            INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
+            WHERE passage.num_centre = %s
+            ORDER BY passage.date_passage ASC;
+        '''
+        mycursor.execute(sql, (centre,))
+        passages = mycursor.fetchall()
+
+        sql = '''
+            SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+            FROM passage
+            WHERE passage.num_centre = %s;
+        '''
+        mycursor.execute(sql, (centre,))
+    elif centre == "" and vehicule != "":
+
+        sql = '''
+            SELECT passage.id_passage, centre.nom_centre, vehicule.nom_vehicule, passage.date_passage
+            FROM passage
+            INNER JOIN centre ON passage.num_centre = centre.num_centre
+            INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
+            WHERE passage.num_vehicule = %s
+            ORDER BY passage.date_passage ASC;
+        '''
+        mycursor.execute(sql, (vehicule,))
+        passages = mycursor.fetchall()
+
+        sql = '''
+            SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+            FROM passage
+            WHERE passage.num_vehicule = %s;
+        '''
+        mycursor.execute(sql, (vehicule,))
+    else:
+
+        sql = '''
+            SELECT passage.id_passage, centre.nom_centre, vehicule.nom_vehicule, passage.date_passage
+            FROM passage
+            INNER JOIN centre ON passage.num_centre = centre.num_centre
+            INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
+            WHERE passage.num_centre = %s AND passage.num_vehicule = %s
+            ORDER BY passage.date_passage ASC;
+        '''
+        mycursor.execute(sql, (centre, vehicule))
+        passages = mycursor.fetchall()
+
+        sql = '''
+            SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+            FROM passage
+            WHERE passage.num_centre = %s AND passage.num_vehicule = %s;
+        '''
+        mycursor.execute(sql, (centre, vehicule))
+
+    total_centres = mycursor.fetchone()
+
+    return render_template('passage/passage_etat.html', centres=centres, vehicules=vehicules, passages=passages, total_centres=total_centres)
+
 # ---------------------------------------------------------------------#
 
 """
