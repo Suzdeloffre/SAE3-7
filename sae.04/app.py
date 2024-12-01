@@ -165,7 +165,13 @@ def etat_benne():
     mycursor.execute(sql)
     bennes = mycursor.fetchall()
 
-    return render_template('benne/benne_etat.html', centres=centres, produits=produits, bennes=bennes)
+    sql = '''   SELECT SUM(benne.volume*benne.nb_benne) AS v, SUM(benne.nb_benne) AS nb
+                                FROM benne
+                            '''
+    mycursor.execute(sql)
+    Vtotal = mycursor.fetchone()
+
+    return render_template('benne/benne_etat.html', centres=centres, produits=produits, bennes=bennes, Vtotal=Vtotal)
 
 @app.route('/benne/etat', methods=['POST'])
 def valid_etat_benne():
@@ -193,6 +199,12 @@ def valid_etat_benne():
                     ORDER BY centre.nom_centre ASC;
                     '''
         mycursor.execute(sql)
+        bennes = mycursor.fetchall()
+
+        sql = '''   SELECT SUM(benne.volume*benne.nb_benne) AS v, SUM(benne.nb_benne) AS nb
+                            FROM benne
+                        '''
+        mycursor.execute(sql)
     elif centre == "" and produit != "":
         sql = '''   SELECT benne.id_benne, centre.nom_centre, benne.volume, benne.nb_benne, produit.libelle_produit
                     FROM benne
@@ -202,6 +214,13 @@ def valid_etat_benne():
                     ORDER BY centre.nom_centre ASC;
                     '''
         mycursor.execute(sql, produit)
+        bennes = mycursor.fetchall()
+
+        sql = '''   SELECT SUM(benne.volume*benne.nb_benne) AS v, SUM(benne.nb_benne) AS nb
+                            FROM benne
+                            WHERE benne.num_produit = %s
+                        '''
+        mycursor.execute(sql, produit)
     elif centre != "" and produit == "":
         sql = '''   SELECT benne.id_benne, centre.nom_centre, benne.volume, benne.nb_benne, produit.libelle_produit
                     FROM benne
@@ -210,6 +229,13 @@ def valid_etat_benne():
                     WHERE benne.num_centre = %s
                     ORDER BY centre.nom_centre ASC;
                     '''
+        mycursor.execute(sql, centre)
+        bennes = mycursor.fetchall()
+
+        sql = '''   SELECT SUM(benne.volume*benne.nb_benne) AS v, SUM(benne.nb_benne) AS nb
+                            FROM benne
+                            WHERE benne.num_centre = %s
+                        '''
         mycursor.execute(sql, centre)
     else:
         sql = '''   SELECT benne.id_benne, centre.nom_centre, benne.volume, benne.nb_benne, produit.libelle_produit
@@ -221,10 +247,21 @@ def valid_etat_benne():
                     '''
         tuple_insert = (centre, produit)
         mycursor.execute(sql, tuple_insert)
-    bennes = mycursor.fetchall()
+        bennes = mycursor.fetchall()
 
+        sql = '''   SELECT SUM(benne.volume*benne.nb_benne) AS v, SUM(benne.nb_benne) AS nb
+                    FROM benne
+                    WHERE benne.num_centre = %s AND benne.num_produit = %s
+                '''
+        tuple_insert = (centre, produit)
+        mycursor.execute(sql, tuple_insert)
 
-    return render_template('benne/benne_etat.html', centres=centres, produits=produits, bennes=bennes)
+    Vtotal = mycursor.fetchone()
+    if Vtotal['v'] == None:
+        Vtotal['v'] = 0
+    if Vtotal['nb'] == None:
+        Vtotal['nb'] = 0
+    return render_template('benne/benne_etat.html', produits=produits, centres=centres, bennes=bennes, Vtotal=Vtotal)
 
 # ---------------------------------------------------------------------#
 
