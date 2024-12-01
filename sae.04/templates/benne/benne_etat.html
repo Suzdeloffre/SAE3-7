@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    <title>Benne</title>
+{% endblock %}
+
+{% block body %}
+    <h3>Etat des bennes</h3>
+    <form method="post" action="/benne/etat">
+        <fieldset>
+            <legend> Filtre de l'etat</legend>
+
+            <label for="centre">Centre</label><br>
+            <select name="centre">
+                <option value="">Sélectionner un centre</option>
+                {% for centre in centres %}
+                    <option value="{{ centre.id }}"> {{ centre.nom }} / {{ centre.adresse }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="produit">Produit</label><br>
+            <select name="produit">
+                <option value="">Sélectionner un type de produit</option>
+                {% for produit in produits %}
+                    <option value="{{ produit.id }}"> {{ produit.nom }}</option>
+                {% endfor %}
+            </select><br>
+
+            <input type="submit" value="Valider" name="Valider">
+        </fieldset>
+    </form>
+
+    <br>
+    <table class="table table-striped table-dark">
+        <thead>
+        <tr>
+            <th>Centre</th>
+            <th>Volume par benne</th>
+            <th>Nombre</th>
+            <th>Produit</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for benne in bennes %}
+            <tr>
+                <td>{{ benne.nom_centre }}</td>
+                <td>{{ benne.volume }}</td>
+                <td>{{ benne.nb_benne }}</td>
+                <td>{{ benne.libelle_produit }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

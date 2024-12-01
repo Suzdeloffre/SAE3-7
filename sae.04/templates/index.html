@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    {% block title %}
+        <title>Accueil</title>
+    {% endblock %}
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+
+    <!-- Fonts and icons -->
+    <!-- Ajout des polices et icones -->
+    <script src="{{ url_for('static', filename='js/plugin/webfont/webfont.min.js') }}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{{ url_for('static', filename='css/fonts.min.css') }}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plugins.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/kaiadmin.min.css') }}" />
+  </head>
+  <body>
+    <div class="wrapper">
+        <!-- Ajout de la barre de menu -->
+      {% include('template-sections/side_bar.html') %}
+
+      <div class="main-panel">
+      <!-- Ajout de l'entete contenant le message de bienvenue -->
+        {% include('template-sections/main_header.html') %}
+        {% block body %}
+        <!-- Contenu de la page-->
+        <div class="container">
+          <div class="page-inner">
+            <div
+              class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+            >
+              <div>
+                <h3 class="fw-bold mb-3">Tableau de bord</h3>
+                <h6 class="op-7 mb-2">Accueil</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+    <!--   Core JS Files   -->
+    <script src="{{ url_for('static', filename='js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/core/bootstrap.min.js') }}"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="{{ url_for('static', filename='js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="{{ url_for('static', filename='js/kaiadmin.min.js') }}"></script>
+  </body>
+</html>
