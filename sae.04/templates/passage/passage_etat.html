@@ -7,51 +7,64 @@
 {% block body %}
     <h3>Etat des passages</h3>
     <form method="post" action="/passage/etat">
-        <fieldset>
-            <legend> Filtre de l'etat</legend>
 
-            <label for="centre">Centre :</label>
-        <select name="centre">
-            <option value="">Tous</option>
-            {% for centre in centres %}
-            <option value="{{ centre.id }}">{{ centre.nom }} / {{ centre.num }} </option>
-            {% endfor %}
-        </select>
+        <div class="card border-dark mb-3"  style="max-width: 100%;margin: 10px">
+            <div class="card-header">
+                <legend> Filtrer les passages</legend>
+            </div>
+            <div class="card-body">
 
-        <label for="vehicule">Véhicule :</label>
-        <select name="vehicule">
-            <option value="">Tous</option>
-            {% for vehicule in vehicules %}
-            <option value="{{ vehicule.id }}">{{ vehicule.nom }} / {{ vehicule.num }}</option>
-            {% endfor %}
-        </select>
+                <fieldset>
 
-            <input type="submit" value="Valider" name="Valider">
-        </fieldset>
+                    <div class="row g-3" style="padding:10px">
+                        <div class="col">
+                            <label class="col-sm-2 col-form-label" for="marque">Marque</label><br>
+                            <select class="form-select" name="date">
+                                <option value="">Sélectionner une date</option>
+                                {% for date in dates %}
+                                    <option value="{{ date.JMA }}"> {{ date.JMA }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                     <div class="row g-3" style="padding:10px">
+                        <div class="col">
+                            <label class="col-sm-2 col-form-label" for="type_vehicule">Type de vehicule</label><br>
+                            <select class="form-select" name="vehicule">
+                                <option value="">Sélectionner un véhicule</option>
+                                {% for vehicule in vehicules %}
+                                    <option value="{{ vehicule.id }}"> {{ vehicule.id }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                     </div>
+                <input class="btn btn-primary mb-3" style="margin:10px" type="submit" value="Valider" name="Valider">
+            </fieldset>
+        </div>
     </form>
 
-    <br>
-    Total des centres visités : {{ total_centres.total_centres }}
-    <table class="table table-striped table-hover" style="margin-top:20px">
-        <thead>
-        <tr class="table-success" >
-            <th>Centre</th>
-            <th>Vehicule</th>
-            <th>Nombre passage</th>
+    <div class="card" style="margin:10px">
+        <h3> Il y a eu {{ nbC.nb_c }} centre(s) visité.</h3>
+        <table class="table table-striped table-hover" style="margin-top:20px; padding: 10px; border:lightgrey solid 1px; ">
+            <thead>
+            <tr class="table-success" >
+                    <th>Date</th>
+                    <th>Ordre</th>
+                    <th>Centre</th>
+                    <th>Véhicule</th>
+                </tr>
+            </thead>
 
-        </tr>
-        </thead>
-
-        <tbody>
-        {% for passage in passages %}
-            <tr>
-                <td>{{ passage.id_passage }}</td>
-                <td>{{ passage.num_centre }}</td>
-                <td>{{ passage.num_vehicule }}</td>
-                <td>{{ passage.JMA }}</td>
-                <td>{{ passage.ordre }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <tbody>
+            {% for passage in passages %}
+                <tr>
+                    <td>{{ passage.JMA }}</td>
+                    <td>{{ passage.ordre }}</td>
+                    <td>{{ passage.nom_centre }}</td>
+                    <td>{{ passage.num_vehicule }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

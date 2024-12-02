@@ -7,10 +7,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 def get_db():
     if 'db' not in g:
         g.db =  pymysql.connect(
-            host="serveurmysql.iut-bm.univ-fcomte.fr", # à modifier
-            user="sdeloffr", # à modifier
+            host="serveurmysql", # à modifier
+            user="acolas", # à modifier
             password="mdp", # à modifier
-            database="BDD_sdeloffr", # à modifier
+            database="BDD_acolas", # à modifier
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -666,11 +666,11 @@ def etat_passage():
     mycursor = get_db().cursor()
 
     sql = '''
-        SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
-        FROM centre;
+        SELECT passage.JMA
+        FROM passage;
     '''
     mycursor.execute(sql)
-    centres = mycursor.fetchall()
+    dates = mycursor.fetchall()
 
     sql = '''
         SELECT vehicule.num_vehicule AS id
@@ -681,24 +681,24 @@ def etat_passage():
 
 
     sql = '''
-        SELECT passage.id_passage, centre.nom_centre, vehicule.num_vehicule, passage.date_passage
+        SELECT DISTINCT centre.nom_centre, vehicule.num_vehicule, passage.JMA
         FROM passage
         INNER JOIN centre ON passage.num_centre = centre.num_centre
         INNER JOIN vehicule ON passage.num_vehicule = vehicule.num_vehicule
-        ORDER BY passage.date_passage ASC;
+        ORDER BY passage.JMA;
     '''
     mycursor.execute(sql)
     passages = mycursor.fetchall()
 
 
     sql = '''
-        SELECT COUNT(DISTINCT passage.num_centre) AS total_centres
+        SELECT COUNT(DISTINCT passage.num_centre) AS nb_c
         FROM passage;
     '''
     mycursor.execute(sql)
-    total_centres = mycursor.fetchone()
+    nbC = mycursor.fetchone()
 
-    return render_template('passage/passage_etat.html', centres=centres, vehicules=vehicules, passages=passages, total_centres=total_centres)
+    return render_template('passage/passage_etat.html', dates=dates, vehicules=vehicules, passages=passages, nbC=nbC)
 
 @app.route('/passage/etat', methods=['POST'])
 def valid_etat_passage():
