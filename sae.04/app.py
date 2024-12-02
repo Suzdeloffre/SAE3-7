@@ -456,25 +456,94 @@ def etat_vehicule():
 
     return render_template('vehicule/vehicule_etat.html', marques=marques, type_vehicules=type_vehicules, vehicules=vehicules, nbV=nbV)
 
-@app.route('/vehicule/edit', methods=['POST'])
+@app.route('/vehicule/etat', methods=['POST'])
 def valid_etat_vehicule():
-    id = request.form.get('id')
-    num_type = request.form.get('type_vehicule')
-    num_marque = request.form.get('marque')
-    poid_max = request.form.get('poid_max')
-    date_achat = request.form.get('date_achat')
+    mycursor = get_db().cursor()
+    sql = '''
+                SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle
+                FROM type_vehicule;
+                '''
+    mycursor.execute(sql)
+    type_vehicules = mycursor.fetchall()
 
-   # mycursor = get_db().cursor()
-    #sql = '''
-        #UPDATE vehicule
-       # SET num_type = %s, num_marque = %s, poid_max = %s, date_achat = %s
-       # WHERE num_vehicule = %s;
-   # '''
-    #tuple_insert=(num_type, num_marque, poid_max, date_achat, id)
-   # mycursor.execute(sql, tuple_insert)
-    #get_db().commit()
+    sql = '''
+                SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
+                FROM marque;
+                '''
+    mycursor.execute(sql)
+    marques = mycursor.fetchall()
 
-    return redirect('/vehicule/etat')
+    marque = request.form.get('marque')
+    type_vehicule = request.form.get('type_vehicule')
+    if marque == "" and type_vehicule == "":
+        sql = '''   SELECT *
+                        FROM vehicule
+                        INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type
+                        INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                        ORDER BY type_vehicule.libelle_type ASC;
+                        '''
+        mycursor.execute(sql)
+        vehicules = mycursor.fetchall()
+
+        sql = '''   SELECT COUNT(vehicule.num_vehicule) AS nb_v
+                                        FROM vehicule
+                                    '''
+        mycursor.execute(sql)
+    elif marque == "" and type_vehicule != "":
+        sql = '''   SELECT *
+                                FROM vehicule
+                                INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type
+                                INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                                WHERE vehicule.num_type=%s
+                                ORDER BY type_vehicule.libelle_type ASC;
+                                '''
+        mycursor.execute(sql, type_vehicule)
+        vehicules = mycursor.fetchall()
+
+        sql = '''   SELECT COUNT(vehicule.num_vehicule) AS nb_v
+                                                FROM vehicule
+                                                WHERE vehicule.num_type=%s
+                                            '''
+        mycursor.execute(sql, type_vehicule)
+    elif marque != "" and type_vehicule == "":
+        sql = '''   SELECT *
+                                FROM vehicule
+                                INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type
+                                INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                                WHERE vehicule.num_marque=%s
+                                ORDER BY type_vehicule.libelle_type ASC;
+                                '''
+        mycursor.execute(sql, marque)
+        vehicules = mycursor.fetchall()
+
+        sql = '''   SELECT COUNT(vehicule.num_vehicule) AS nb_v
+                                                FROM vehicule
+                                                WHERE vehicule.num_marque=%s
+                                            '''
+        mycursor.execute(sql, marque)
+    else:
+        sql = '''   SELECT *
+                                FROM vehicule
+                                INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type
+                                INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                                WHERE vehicule.num_marque=%s AND vehicule.num_type=%s
+                                ORDER BY type_vehicule.libelle_type ASC;
+                                '''
+        tuple_insert = (marque, type_vehicule)
+        mycursor.execute(sql, tuple_insert)
+        vehicules = mycursor.fetchall()
+
+        sql = '''   SELECT COUNT(vehicule.num_vehicule) AS nb_v
+                                                FROM vehicule
+                                                WHERE vehicule.num_marque=%s AND vehicule.num_type=%s
+                                            '''
+        tuple_insert = (marque, type_vehicule)
+        mycursor.execute(sql, tuple_insert)
+
+    nbV = mycursor.fetchone()
+    if nbV['nb_v'] == None:
+        nbV['v'] = 0
+    return render_template('vehicule/vehicule_etat.html', marques=marques, type_vehicules=type_vehicules, vehicules=vehicules, nbV=nbV)
 
 
 # ---------------------------------------------------------------------#
