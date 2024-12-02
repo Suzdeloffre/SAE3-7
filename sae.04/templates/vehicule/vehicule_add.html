@@ -18,7 +18,7 @@
                         <div class="col">
                             <label class="col-sm-2 col-form-label" for="type_vehicule">Le type de véhicule</label><br>
                             <select class="form-select" name="type_vehicule" required>
-                                <option selected>Sélectionner un type</option>
+                                <option value="">Sélectionner un type</option>
                                 {% for type_vehicule in type_vehicules %}
                                     <option value="{{ type_vehicule.id }}"> {{ type_vehicule.libelle }}</option>
                                 {% endfor %}
@@ -30,7 +30,7 @@
                         <div class="col">
                             <label class="col-sm-2 col-form-label" for="marque">La marque</label><br>
                             <select class="form-select" name="marque" required>
-                                <option selected>Sélectionner une marque</option>
+                                <option value="">Sélectionner une marque</option>
                                 {% for marque in marques %}
                                     <option value="{{ marque.id }}"> {{ marque.libelle }}</option>
                                 {% endfor %}

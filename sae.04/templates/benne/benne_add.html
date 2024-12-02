@@ -20,7 +20,7 @@
                     <div class="col">
                         <label class="col-sm-2 col-form-label" for="centre" >Centre</label><br>
                         <select class="form-select" name="centre" required>
-                            <option  selected>Sélectionner un centre</option>
+                            <option value="">Sélectionner un centre</option>
                             {% for centre in centres %}
                                 <option value="{{ centre.id }}"> {{ centre.nom }} / {{ centre.adresse }}</option>
                             {% endfor %}
@@ -31,7 +31,7 @@
                     <div class="col">
                         <label class="col-sm-2 col-form-label" for="produit">Produit</label><br>
                         <select class="form-select" name="produit" required>
-                            <option selected>Sélectionner un type de produit</option>
+                            <option value="">Sélectionner un type de produit</option>
                             {% for produit in produits %}
                                 <option value="{{ produit.id }}"> {{ produit.nom }}</option>
                             {% endfor %}
