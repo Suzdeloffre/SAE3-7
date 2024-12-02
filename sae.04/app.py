@@ -7,10 +7,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 def get_db():
     if 'db' not in g:
         g.db =  pymysql.connect(
-            host="serveurmysql.iut-bm.univ-fcomte.fr", # à modifier
-            user="sdeloffr", # à modifier
+            host="serveurmysql", # à modifier
+            user="acolas", # à modifier
             password="mdp", # à modifier
-            database="BDD_sdeloffr", # à modifier
+            database="BDD_acolas", # à modifier
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -422,38 +422,39 @@ def valid_delete_decharge():
     get_db().commit()
     return redirect('/vehicule/delete?id='+idV)
 
-@app.route('/vehicule/etat', methods=['GET'])
+@app.route('/vehicule/etat')
 def etat_vehicule():
-    id=request.args.get('id')
-    if id != None and id.isnumeric():
-        indice = int(id)
-        mycursor = get_db().cursor()
-        sql = '''
-                SELECT num_vehicule, num_type, num_marque, poid_max, date_achat 
+    mycursor = get_db().cursor()
+    sql = '''
+            SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle
+            FROM type_vehicule;
+            '''
+    mycursor.execute(sql)
+    type_vehicules = mycursor.fetchall()
+
+    sql = '''
+            SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
+            FROM marque;
+            '''
+    mycursor.execute(sql)
+    marques = mycursor.fetchall()
+
+    sql = '''   SELECT *
                 FROM vehicule
-                WHERE num_vehicule=%s;
-                '''
-        mycursor.execute(sql, indice)
-        vehicule = mycursor.fetchone()
+                INNER JOIN type_vehicule ON vehicule.num_type = type_vehicule.num_type
+                INNER JOIN marque ON vehicule.num_marque = marque.num_marque
+                ORDER BY type_vehicule.libelle_type ASC;
+                     '''
+    mycursor.execute(sql)
+    vehicules = mycursor.fetchall()
 
-        sql = '''
-                SELECT type_vehicule.num_type AS id, type_vehicule.libelle_type AS libelle,
-                FROM type_vehicule;
-                '''
-        mycursor.execute(sql)
-        type_vehicule = mycursor.fetchall()
+    sql = '''   SELECT COUNT(vehicule.num_vehicule) AS nb_v
+                                FROM vehicule
+                            '''
+    mycursor.execute(sql)
+    nbV = mycursor.fetchone()
 
-        sql = '''
-                SELECT marque.num_marque AS id, marque.libelle_marque AS libelle
-                FROM marque;
-                '''
-        mycursor.execute(sql)
-        marque = mycursor.fetchall()
-
-        get_db().commit()
-    else:
-        vehicule=[]
-    return render_template('vehicule/vehicule_etat.html', vehicule=vehicule, type_vehicule=type_vehicule, marque=marque)
+    return render_template('vehicule/vehicule_etat.html', marques=marques, type_vehicules=type_vehicules, vehicules=vehicules, nbV=nbV)
 
 @app.route('/vehicule/edit', methods=['POST'])
 def valid_etat_vehicule():
