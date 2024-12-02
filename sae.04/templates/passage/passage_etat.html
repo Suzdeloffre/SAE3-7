@@ -49,7 +49,6 @@
             <thead>
             <tr class="table-success" >
                     <th>Date</th>
-                    <th>Ordre</th>
                     <th>Centre</th>
                     <th>Véhicule</th>
                 </tr>
@@ -59,7 +58,6 @@
             {% for passage in passages %}
                 <tr>
                     <td>{{ passage.JMA }}</td>
-                    <td>{{ passage.ordre }}</td>
                     <td>{{ passage.nom_centre }}</td>
                     <td>{{ passage.num_vehicule }}</td>
                 </tr>

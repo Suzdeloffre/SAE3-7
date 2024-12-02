@@ -666,7 +666,7 @@ def etat_passage():
     mycursor = get_db().cursor()
 
     sql = '''
-        SELECT passage.JMA
+        SELECT DISTINCT passage.JMA
         FROM passage;
     '''
     mycursor.execute(sql)
@@ -692,7 +692,7 @@ def etat_passage():
 
 
     sql = '''
-        SELECT COUNT(DISTINCT passage.num_centre) AS nb_c
+        SELECT COUNT(DISTINCT passage.num_centre, passage.num_vehicule, passage.JMA) AS nb_c
         FROM passage;
     '''
     mycursor.execute(sql)
