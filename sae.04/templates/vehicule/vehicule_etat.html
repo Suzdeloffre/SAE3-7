@@ -6,7 +6,8 @@
 
 {% block body %}
     <h3>Etat des véhicules</h3>
-    <form method="post" action="/benne/etat">
+    <form method="post" action="/vehicule/etat">
+
         <div class="card border-dark mb-3"  style="max-width: 100%;margin: 10px">
             <div class="card-header">
                 <legend> Filtrer les véhicules</legend>
@@ -37,7 +38,7 @@
                             </select>
                         </div>
                      </div>
-                <input type="submit" value="Valider" name="Valider">
+                <input class="btn btn-primary mb-3" style="margin:10px" type="submit" value="Valider" name="Valider">
             </fieldset>
         </div>
     </form>
