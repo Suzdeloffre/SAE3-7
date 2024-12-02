@@ -19,7 +19,7 @@
                     <div class="row g-3" style="padding:10px">
                         <div class="col">
                             <label class="col-sm-2 col-form-label" for="marque">Marque</label><br>
-                            <select class="form-select" name="date">
+                            <select class="form-select" name="date" required>
                                 <option value="">Sélectionner une date</option>
                                 {% for date in dates %}
                                     <option value="{{ date.JMA }}"> {{ date.JMA }}</option>
@@ -30,7 +30,7 @@
                      <div class="row g-3" style="padding:10px">
                         <div class="col">
                             <label class="col-sm-2 col-form-label" for="type_vehicule">Type de vehicule</label><br>
-                            <select class="form-select" name="vehicule">
+                            <select class="form-select" name="vehicule" required>
                                 <option value="">Sélectionner un véhicule</option>
                                 {% for vehicule in vehicules %}
                                     <option value="{{ vehicule.id }}"> {{ vehicule.id }}</option>
