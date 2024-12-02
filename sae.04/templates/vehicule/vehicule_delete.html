@@ -64,10 +64,10 @@
                        href="{{ '/vehicule/delete/passage?id=' }}{{ passage.id_passage }}{{ '&idV=' }}{{ id }}">
                         Suprimer
                     </a>
-                    <a class="btn btn-danger mb-3" href="/vehicule/show">Annuler</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+     <a class="btn btn-danger mb-3" style="width: 100px; margin:10px" href="/vehicule/show">Annuler</a>
 {% endblock %}
