@@ -7,10 +7,10 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 def get_db():
     if 'db' not in g:
         g.db =  pymysql.connect(
-            host="localhost", # à modifier
-            user="alexis", # à modifier
-            password="Samsung21C!", # à modifier
-            database="BDD_alexis", # à modifier
+            host="serveurmysql.iut-bm.univ-fcomte.fr", # à modifier
+            user="sdeloffr", # à modifier
+            password="mdp", # à modifier
+            database="BDD_sdeloffr", # à modifier
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
