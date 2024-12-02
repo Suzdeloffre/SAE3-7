@@ -39,7 +39,7 @@ def show_benne():
                  '''
     mycursor.execute(sql)
     bennes = mycursor.fetchall()
-    return render_template('benne/benne_show.html', bennes= bennes)
+    return render_template('benne/benne_show.html', bennes=bennes)
 
 @app.route('/benne/add', methods=['GET'])
 def add_benne():
