@@ -593,7 +593,7 @@ def delete_passage():
 
 @app.route('/passage/etat')
 def etat_passage():
-    mycursor = get_db().cursor(dictionary=True)
+    mycursor = get_db().cursor()
 
     sql = '''
         SELECT centre.num_centre AS id, centre.nom_centre AS nom, centre.adresse_centre AS adresse
@@ -632,7 +632,7 @@ def etat_passage():
 
 @app.route('/passage/etat', methods=['POST'])
 def valid_etat_passage():
-    mycursor = get_db().cursor(dictionary=True)
+    mycursor = get_db().cursor()
 
 
     centre = request.form.get('centre')
