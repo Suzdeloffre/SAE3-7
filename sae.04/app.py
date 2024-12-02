@@ -1033,10 +1033,22 @@ def etat_decharge():
         somme=0
         moyenne=0
 
+    # Requête SQL pour avoir toutes les données
+    sql = '''   SELECT *
+            FROM decharge
+            INNER JOIN usine ON decharge.num_usine = usine.num_usine 
+            INNER JOIN vehicule ON decharge.num_vehicule = vehicule.num_vehicule
+            INNER JOIN  produit ON decharge.num_produit = produit.num_produit
+            ORDER BY JMA DESC;
+                 '''
+    mycursor.execute(sql)
+    liste_decharge = mycursor.fetchall()  # récupération du résultat
+
     return render_template('decharge/decharge_etat.html',
             usines=usines,
             produits=produits,
             vehicules=vehicules,
+            decharges=liste_decharge,
             somme=somme,
             moyenne=moyenne,
             pourcentage_somme=100,
@@ -1072,15 +1084,15 @@ def etat_filtre_decharge():
     num_vehicule = request.form['num_vehicule']
 
     if num_usine != '0':
-        conditions.append("num_usine = %s")
+        conditions.append("decharge.num_usine = %s")
         params.append(num_usine)
 
     if num_produit != '0':
-        conditions.append("num_produit = %s")
+        conditions.append("decharge.num_produit = %s")
         params.append(num_produit)
 
     if num_vehicule != '0':
-        conditions.append("num_vehicule = %s")
+        conditions.append("decharge.num_vehicule = %s")
         params.append(num_vehicule)
 
     # On ajoute donc les conditions au sql
@@ -1092,16 +1104,29 @@ def etat_filtre_decharge():
     result = mycursor.fetchone()
     moyenne = 0
     somme = 0
-    if result != None:
+    if result['somme'] != None and result['moyenne'] != None:
         somme=result['somme']
         moyenne = result['moyenne']
 
+    pourcentage_somme = 0
+    pourcentage_moyenne = 0
     if somme_totale > 0:
         pourcentage_somme = (somme / somme_totale) * 100
         pourcentage_moyenne = (moyenne / somme_totale) * 100
-    else:
-        pourcentage_somme = 0
-        pourcentage_moyenne = 0
+
+
+    # Requête SQL pour avoir la liste des résultats
+    sql = '''   SELECT *
+            FROM decharge
+            INNER JOIN usine ON decharge.num_usine = usine.num_usine 
+            INNER JOIN vehicule ON decharge.num_vehicule = vehicule.num_vehicule
+            INNER JOIN  produit ON decharge.num_produit = produit.num_produit
+                 '''
+    # On ajoute donc les conditions au sql
+    if conditions:
+        sql += " WHERE " + " AND ".join(conditions)
+    mycursor.execute(sql, params)
+    liste_decharge = mycursor.fetchall()  # récupération du résultat
 
     """
     La page a besoin de la liste des usines, des produits et des véhicules
@@ -1133,6 +1158,7 @@ def etat_filtre_decharge():
             usines=usines,
             produits=produits,
             vehicules=vehicules,
+            decharges=liste_decharge,
             somme="{:.2f}".format(somme),
             moyenne="{:.2f}".format(moyenne),
             pourcentage_somme="{:.2f}".format(pourcentage_somme),
